@@ -1,0 +1,258 @@
+<h1>Développment d'une application avec le framework Play 2</h1>
+
+<h2>Introduction</h2>
+<p>
+Cette application est un exemple d'application qui peut être réalisée en utilisant le framework d'application Rest Play!
+Pour cette application, la version 2 du framework a été utilisée.
+<br />
+L'application est un cas simple d'une application plus complète qui est développée pour la Junior Entreprise de Telecom ParisTech.
+Cette application est un Intranet pour la gestion des études de Telecom Etude. <br /> 
+Il faut ainsi gérer différents utilisateurs, des opérations sur la base de données, de la génération de document.
+</p>
+<p>
+Dans cet exemple, nous nous concentrerons sur la gestion des intervenants. Ce sont les personnes qui réalisent les études et ui doivent adhérer à l'association.
+Cette adhésion doit être renouvellée chaque année et à chaque fois, il faut générer un document pour valider l'adhésion. Ainsi un intervenant peut avoir plusieurs adhésions.
+<br />
+Ainsi nous créerons plusieurs vues pour cette gestion :
+</p>
+<ul>
+  <li> Une liste de tous les intervenants </li>
+  <li> Une page pour créer/modifier un intervenant </li>
+  <li> Une liste des adhésions d'un intervenant : cette page permettra également de modifier les adhésions et de générer le document pour l'adhésion</li>
+</ul>
+
+
+<h2>Configuration de play</h2>
+<p>
+Pour installer le framework, je me suis reporté à cette <a href="http://www.playframework.org/documentation/2.0.1/Installing">page</a>
+</p>
+<p>
+Ensuite, nous créons une nouvelle application avec la commande : <br /> 
+<code>play new</code> <br />
+On sélectionne ensuite une application de type java.
+</p>
+<p>
+Pour lancer l'application on utilise la commande : <br/> 
+<code>play ~run</code><br />
+Cela permet d'avoir la compilation des sources dès qu'un des fichiers est modifié.
+</p>
+<p>
+Un IDE tel qu'Eclipse peut être utilisé pour modifier les fichiers. Pour cela, le framework permet de générer automatiquement des fichiers de configuration pour Eclipse grâce à la commande : 
+<br />
+<code>play eclipsify</code><br />
+Il suffit ensuite d'importer le projet dans Eclipse.
+</p>
+<p>Pour voir l'application il suffit de lancer dans un navigateur l'url : <a href="http://localhost:9000">http://localhost:9000</a> <br />
+Ainsi nous avons configuré Play! et créé notre première application. Nous allons dans la partie suivante analysé ce qui constitue une application play!. 
+</p>
+
+
+<h2>Analyse d'une application Play!</h2>
+
+<p>L'application par défault est composé des différents répertoires: (<a href="http://www.playframework.org/documentation/2.0.1/Anatomy">source</a>) <br /> 
+<pre><code>app                      → Application sources
+ └ assets                → Compiled asset sources
+    └ stylesheets        → Typically LESS CSS sources
+    └ javascripts        → Typically CoffeeScript sources
+ └ controllers           → Application controllers
+ └ models                → Application business layer
+ └ views                 → Templates
+conf                     → Configurations files and other non-compiled resources (on classpath)
+ └ application.conf      → Main configuration file
+ └ routes                → Routes definition
+public                   → Public assets
+ └ stylesheets           → CSS files
+ └ javascripts           → Javascript files
+ └ images                → Image files
+project                  → sbt configuration files
+ └ build.properties      → Marker for sbt project
+ └ Build.scala           → Application build script
+ └ plugins.sbt           → sbt plugins
+lib                      → Unmanaged libraries dependencies
+logs                     → Standard logs folder
+ └ application.log       → Default log file
+target                   → Generated stuff
+ └ scala-2.9.1              
+    └ cache              
+    └ classes            → Compiled class files
+    └ classes_managed    → Managed class files (templates, ...)
+    └ resource_managed   → Managed resources (less, ...)
+    └ src_managed        → Generated sources (templates, ...)
+test                     → source folder for unit or functional tests
+</code></pre>
+
+<p>
+Les principaux fichiers et répertoires sont :
+</p>
+<ul>
+  <li> conf/routes : définition des différentes routes pour l'application </li>
+  <li> conf/application.conf : configuration de l'application </li>
+  <li> app/controllers : les controleurs de l'application </li>
+  <li> app/models : les modèles pour l'application </li>
+  <li> app/views : les différentes vues
+</ul>
+On voit bien le découpement MVC de l'application. La configuration est également aisée notamment ma connexion à une base de données. 
+
+<p>Dans la suite nous allons commencer à créer notre modèle.</p>
+
+<h2>Création des modèles</h2>
+<h3>Configuration</h3>
+<p>
+Nous allons stocker nos informations dans une base de données en mémoire. L'application embarque H2, il suffit de l'activer. 
+Pour cela, il suffit de décommenter dans le fichier conf/application.conf les lignes suivantes : <br />
+</p>
+<pre><code>db.default.driver=org.h2.Driver
+db.default.url="jdbc:h2:mem:play"</code></pre>
+Pour la connection avec la base de données nous allons utiliser l'ORM fourni avec le framework (avec la version 2): Ebean. 
+Ebean utilise les annotations JPA: <code>@@entity</code>, <code>@@OneToMany</code> ... <br />
+Pour l'activer, on décommente la ligne: 
+<pre><code>ebean.default="models.*"</code></pre>
+
+
+<h3>La classe Intervenant</h3>
+<p>On va créer un intervenant possédant un id, un nom, prénom et un email.
+<pre class="prettyprint"><code class="language-java">package models;
+
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+import com.avaje.ebean.Page;
+
+import play.data.validation.Constraints.Email;
+import play.data.validation.Constraints.Required;
+import play.db.ebean.Model;
+
+@@Entity
+public class Intervenant extends Model {
+
+	@@Id
+	@@GeneratedValue
+	public Long id;
+	
+	@@Required
+	public String nom;
+	
+	@@Required
+	public String prenom;
+	
+	@@Required
+	@@Email
+	public String email;
+	
+	public static Finder&lt;Long, Intervenant&gt; find = new Finder&lt;Long,Intervenant&gt;(Long.class, Intervenant.class);
+	
+	public static Intervenant findById(Long id){
+		return find.byId(id);
+	}
+	
+	public static List&lt;Intervenant&gt; findByNom(String nom){
+		return find.where().eq("nom", nom).findList();
+	}
+	
+	/**
+	 * Renvoie la page n°'page' avec 'size' intervenants dedans
+	 * @@param size : nombre d'intervenants
+	 * @@param page : numéro de la page
+	 * @@return 
+	 */
+	public static Page&lt;Intervenant&gt; last(int size, int page) {
+		return find.where().orderBy("id desc").findPagingList(size).getPage(page);
+	}
+}
+</code></pre>
+<p>Nous pouvons déjà commenter plusieurs choses :</p>  
+<ul>
+<li> Notre classe étend Model ce qui lui nous donne accès à des fonctions <code>save()</code>, <code>update()</code> ... pour gérer facilement notre modèle. </li>
+<li> Tous les paramètres sont <code>public</code>. 
+Cela vient de scala, tous les paramètres sont déclarés comme public et le pré-compilateur va les convertir en champ statiques et générer les setters/getters de façon automatique.
+Bien sur, on peut implenter nous mêmes des setters et getters. Dans la suite du code, on utilisera <code class="prettyprint">intervenant.nom</code> qui sera automatiquement par <code class="prettyprint">intervenant.getNom()</code> </li>
+<li>On utilise les annotations JPA <code>@@Entity, @@Id ...</code> pour définir notre objet.
+<li>Des annotations de play, nous permettent de définir des contraintes sur nos paramètres. Cela sera très utile pour nos formulaires. </li>
+<li>On crée un Finder <code>find</code> qui va nous permettre d'exécuter des recherches sur nos intervenants.</li>
+<li>La classe <code>Page</code> permet de contenir une liste d'objets issus de la base de données. On utilisera cela lorsque nous listerons les intervenants.</li>   
+</ul>
+
+<p>
+Lorsque l'on relance notre page, le framework a detecté un nouveau modèle à stocker dans notre base de données et nous propose automatiquement de faire une évolution de notre base :
+</p><img src="@routes.Assets.at("images/evolution.png")"/>
+<p>On applique l'évolution à notre base de données 
+</p>
+
+<p>Nous venons de réaliser très simplement un modèle. Grâce aux annotations, nous avons même commencé à réfléchir au type de données et aux différentes contraintes. 
+De son côté le framework génère automatiquement des accès à nos variables, nous fournit des outils pour exécuter des requêtes et crée même nos tables SQL. <br />
+Passons maintenant au deuxième modèle: les adhésions. 
+</p>
+
+<h3>La classe Adhesion</h3>
+
+<pre class="prettyprint"><code>
+package models;
+
+import ...;
+
+@@Entity
+public class Adhesion extends Model {
+
+	@@Id
+	@@GeneratedValue
+	public Long id;
+
+	@@ManyToOne
+	public Intervenant intervenant;
+
+	@@Required
+	@@MinLength(value=4)
+	@@MaxLength(value=4)
+	public int mandat;
+
+	@@DateTime(pattern = "dd/MM/yyyy")
+	public Date dateEdition;
+
+	public static Finder&lt;Long, Adhesion&gt; find = new Finder&lt;Long, Adhesion&gt;(Long.class, Adhesion.class);
+
+	public static List&lt;Adhesion&gt; findByIntervenant(Intervenant intervenant) {
+		return find.where().eq("intervenant", intervenant).orderBy("id desc").findList();
+	}
+}
+</code></pre>
+
+<p>Ici aussi on utilise le Finder <code>find</code> pour faire une recherche sur les adhésions. <br />
+De plus avec les contraintes, on peut définir le format de la date. 
+Au niveau de la base de données, un timestamp sera stocké mais si on travaille avec une base déjà existante, la date peut s'adapter au format SQL: yyyy-MM-dd. 
+Dans les formulaires, la date sera au format spécifié. 
+Et tout cela sans que l'on n'ait à ajouter une ligne de code. <br />
+Lorsqu'on recharge la page <a href="http://localhost:9000">http://localhost:9000</a> une nouvelle évolution de la base de données nous est proposée.
+</p>
+
+<h3>Retour sur la classe Intervenant</h3>
+<p>Dans la classe adhésions nous avons défini une relation <code>@@ManyToOne</code> pour lier les adhésions à un intervenant. Maintenant nous allons lier les intervenants avec les adhésions. 
+</p>
+<p>Dans la classe intervenant, il suffit de rajouter la ligne: </p>
+<pre class="prettyprint">
+	@@OneToMany(mappedBy="intervenant", cascade=CascadeType.ALL)
+	public List&lt;Adhesion&gt; adhesions;
+</pre>
+<p>On vient de mapper la classe intervenant avec la classe adhésion. Cela permet de récupérer les adhésions liés à un intervenant. <br />
+Le paramètre <code>mappedBy</code> est obligatoire est permet de définir sur quoi faire la liaison. 
+Le paramètre <code>cascade</code> permet de spécifier la relation entre les deux objets. Ici par exemple, lorsqu'on supprime un intervenant, toutes les adhésions liées à lui seront automatiquement supprimées.
+</p>
+
+<p>Nous venons de créer les objets dont nous avons besoin pour notre exemple. Nous avons écrit peu de code et peu de configuration grâce au framework. <br />
+Dans la suite, nous allons configurer les controlleurs et les routes de l'applcation. 
+</p>
+
+<h2>Création des controlleurs</h2>
+
+<h3>Le controlleur Intervenants</h3>
+<p>Nous allons créer un controlleur pour gérer les actions sur les intervenants. Nous voulons :
+</p>
+<ul>
+<li> Afficher la liste des intervenants </li>
+<li> Afficher un formulaire vide pour créer un intervenant </li>
+<li> Afficher un formulaire pré-rempli pour modifier un intervenant </li>
+<li> Valider les formulaires </li>
+<li> Supprimer un intervenant </li>
+</ul> 
