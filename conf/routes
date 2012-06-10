@@ -5,5 +5,13 @@
 # Home page
 GET     /                           controllers.Application.index()
 
+# Intervenants
+GET		/intervenants				controllers.Intervenants.liste()
+GET		/intervenants/page/:page	controllers.Intervenants.page(page: java.lang.Integer)
+GET		/intervenants/create		controllers.Intervenants.create()
+POST	/intervenants/submit		controllers.Intervenants.submit()
+GET		/intervenants/edit/:id		controllers.Intervenants.edit(id: Long)
+GET		/intervenants/delete/:id	controllers.Intervenants.delete(id: Long)
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

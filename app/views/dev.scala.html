@@ -1,4 +1,4 @@
-<h1>Développment d'une application avec le framework Play 2</h1>
+<h1>Développement d'une application avec le framework Play 2</h1>
 
 <h2>Introduction</h2>
 <p>
@@ -241,13 +241,13 @@ Le paramètre <code>cascade</code> permet de spécifier la relation entre les de
 </p>
 
 <p>Nous venons de créer les objets dont nous avons besoin pour notre exemple. Nous avons écrit peu de code et peu de configuration grâce au framework. <br />
-Dans la suite, nous allons configurer les controlleurs et les routes de l'applcation. 
+Dans la suite, nous allons configurer les controleurs et les routes de l'applcation. 
 </p>
 
-<h2>Création des controlleurs</h2>
+<h2>Création des controleurs</h2>
 
-<h3>Le controlleur Intervenants</h3>
-<p>Nous allons créer un controlleur pour gérer les actions sur les intervenants. Nous voulons :
+<h3>Le controleur Intervenants</h3>
+<p>Nous allons créer un controleur pour gérer les actions sur les intervenants. Nous voulons :
 </p>
 <ul>
 <li> Afficher la liste des intervenants </li>
@@ -256,3 +256,81 @@ Dans la suite, nous allons configurer les controlleurs et les routes de l'applca
 <li> Valider les formulaires </li>
 <li> Supprimer un intervenant </li>
 </ul> 
+
+<pre class="prettyprint"><code>package controllers;
+
+import models.Intervenant;
+import play.data.Form;
+import play.mvc.Controller;
+import play.mvc.Result;
+
+public class Intervenants extends Controller {
+
+	final static Form&lt;Intervenant&gt; blankForm = form(Intervenant.class);
+
+	public static Result liste(){
+		return TODO;
+	}
+	
+	public static Result page(Integer page){
+		return TODO;
+	}
+	
+	public static Result edit(Long id){
+		return TODO;
+	}
+	
+	public static Result create(){
+		return TODO;
+	}
+	
+	public static Result submit(){
+		return TODO;
+	}
+	
+	public static Result delete(Long id){
+		return TODO;
+	}
+}
+</code></pre>
+<p>Pour l'instant nous avons juste créé le squelette du controleur avec les fonctions que nous allons utiliser. 
+Les fonctions sont déclarées comme <code>static</code> et renvoie un <code>Result</code>. 
+Les résultats sont composés d'un code pour le statut (200, 403, 404 ...), de headers HTTP et d'un corps. 
+Le framework nous donne accès facilement à des constructeurs pour ces réponses. Nous en verrons d'autres dans la suite. <br />
+Pour l'instant les fonctions renvoient une réponse type <code>TODO</code> qui nous permettent de dire que le réponse n'est pas encore implémentée.
+</p>
+<p>Nous allons maintenant implémenter les routes pour accéder à ces fonctions. <br />
+Pour cela on doit modifier le fichier conf/routes : 
+</p>
+<pre ><code># Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index()
+
+# Intervenants
+GET		/intervenants			controllers.Intervenants.liste()
+GET		/intervenants/page/:page	controllers.Intervenants.page(page: java.lang.Integer)
+GET		/intervenants/create		controllers.Intervenants.create()
+POST		/intervenants/submit		controllers.Intervenants.submit()
+GET		/intervenants/edit/:id		controllers.Intervenants.edit(id: Long)
+GET		/intervenants/delete/:id	controllers.Intervenants.delete(id: Long)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
+</code></pre>
+<p>Dans le routage HTTP, nous avons principalement utilisé les méthodes GET et POST mais nous pouvons également utiliser les méthodes PUT, DELETE ... <br />
+Ensuite pour chaque méthode, nous définissons une URI avec possiblement des paramètres et une action d'un controlleur qui va traiter la demande. 
+Le routage avec play! est très facile et puissant, on peut facilement passer plusieurs paramètres, utiliser des expressions régulières ... 
+</p>
+<p>Nous pouvons essayer les routes dès maintenant : <a href="http://localhost:9000/intervenants/edit/5">http://localhost:9000/intervenants/edit/5</a> renvoie une page TODO : </p>
+<img src="@routes.Assets.at("images/todo.png")"/>
+<p>Si l'on met une mauvaise URL, on obtient une erreur. (ici l'erreur est détaillée car le serveur est lancé en mode développement)</p>
+<img src="@routes.Assets.at("images/badresult.png")"/>
+
+<p>Maintenant que les routes sont prêtes, nous allons construire les vues pour afficher nos données. Ensuite nous reviendrons sur notre formulaire pour le compléter</p>
+
+<h2>Les vues</h2>
+
+<h3>Un formulaire pour l'intervenant</h3>
