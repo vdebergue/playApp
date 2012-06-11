@@ -1,0 +1,51 @@
+@(formulaire: Form[Intervenant], edit: Boolean)
+
+@import helper._ 
+
+
+@main( if(edit) "Modifier un Intervenant" else "Créer un intervenant"){
+
+	@if(formulaire.hasGlobalErrors){
+		<div>
+		Erreurs dans le formulaire
+		</div>
+	}
+	
+	@form(action = routes.Intervenants.submit){
+	  <input type="hidden" name="id" value='@formulaire("id").value'/>
+	  <fieldset>
+            <legend>Informations Principales</legend>
+            	
+				@inputText(
+                field = formulaire("nom"),
+				'placeholder -> "Dupont",
+                '_label -> "Nom *",
+                '_help -> ""
+            	)
+
+				@inputText(
+				field = formulaire("prenom"),
+				'placeholder -> "Rocky",
+				'_label -> "Prénom *",
+				'_help -> ""
+            	)
+
+				@inputText(
+				field = formulaire("email"),
+				'placeholder -> "dupont@gmail.com",
+				'_label -> "Email *",
+				'_help -> "Email pour contacter l'intervenant, requis"
+            	)
+        </fieldset>
+                
+		<div class="actions">
+            <button type="submit">
+  				@if(edit){Modifier}else{Créer}
+			</button>
+            <a href="@routes.Intervenants.liste">
+             Retour
+            </a>
+        </div>
+
+	}
+}
