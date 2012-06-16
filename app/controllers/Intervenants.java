@@ -1,5 +1,8 @@
 package controllers;
 
+import com.avaje.ebean.Page;
+
+
 import models.Intervenant;
 
 import play.data.Form;
@@ -13,11 +16,15 @@ public class Intervenants extends Controller {
 	final static Form<Intervenant> blankForm = form(Intervenant.class);
 
 	public static Result liste() {
-		return TODO;
+		return page(1);
 	}
 	
 	public static Result page(Integer page){
-		return TODO;
+		Page<Intervenant> pi = Intervenant.last(15, page-1);
+		if (pi != null) {
+			return ok(IntervenantListe.render(pi));
+		}
+		return badRequest("Erreur");
 	}
 
 	public static Result edit(Long id) {
@@ -57,6 +64,7 @@ public class Intervenants extends Controller {
 	}
 
 	public static Result delete(Long id) {
-		return TODO;
+		Intervenant.find.ref(id).delete();
+		return liste();
 	}
 }

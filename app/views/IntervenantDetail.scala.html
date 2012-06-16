@@ -1,0 +1,11 @@
+@(intervenant: Intervenant)
+
+<tr>
+<td>@intervenant.prenom @intervenant.nom</td>
+<td>@intervenant.email</td>
+<td>@for(adhesion <- intervenant.adhesions){
+@adhesion.mandat
+}</td>
+<td><a href="@routes.Intervenants.edit(intervenant.id)">Modifier</a></td>
+<td><a href="@routes.Intervenants.delete(intervenant.id)">Supprimer</a></td>
+</tr>

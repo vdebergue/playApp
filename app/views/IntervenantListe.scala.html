@@ -1,0 +1,41 @@
+@(intervenants: Page[Intervenant])
+
+@main("Liste des intervenants"){
+
+<h1>Liste des intervenants</h1>
+
+<p>
+<a href="@routes.Intervenants.create">Ajouter</a>
+</p>
+<table>
+  <tr>
+    <th>Nom</th>
+    <th>Email</th>
+    <th>Adhésions</th>
+    <th>Modifier</th>
+    <th>Supprimer</th>
+  </tr>
+  @for(intervenant <- intervenants.getList){
+ 	 	@IntervenantDetail(intervenant)
+	}
+</table>
+@if(intervenants.getTotalPageCount>1){
+    	@if(intervenants.hasPrev) {
+        	<a href="@routes.Intervenants.page(intervenants.getPageIndex)">&larr;</a>
+    	} else {
+        	&larr;
+    	}
+    	@for(p <- 1 to intervenants.getTotalPageCount) {
+      		@if(p-1==intervenants.getPageIndex) {
+          		@p
+      		} else {
+          		<a href="@routes.Intervenants.page(p)">@p</a>
+      		}
+  		}
+    	@if(intervenants.hasNext) {
+        	<a href="@routes.Intervenants.page(intervenants.getPageIndex + 2)">&rarr;</a>
+    	} else {
+        	&rarr;
+    	}
+	}
+}
