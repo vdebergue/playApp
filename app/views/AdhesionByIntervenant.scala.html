@@ -1,0 +1,19 @@
+@(intervenant: Intervenant, adhesions : List[Form[Adhesion]])
+
+@main("Liste des adhésions par intervenant"){
+
+<h1>Liste des adhésions pour @intervenant.prenom @intervenant.nom</h1>
+
+<table>
+<tr>
+<th>Mandat</th>
+<th>Date d'édition</th>
+<th></th>
+</tr>
+@for(adhesion <-adhesions){
+	@AdhesionDetail(adhesion)
+}
+</table>
+
+<a href="@routes.Adhesions.add(intervenant.id)">Ajouter</a>
+}

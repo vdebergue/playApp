@@ -13,5 +13,11 @@ POST	/intervenants/submit		controllers.Intervenants.submit()
 GET		/intervenants/edit/:id		controllers.Intervenants.edit(id: Long)
 GET		/intervenants/delete/:id	controllers.Intervenants.delete(id: Long)
 
+# Adhesions
+GET 	/adhesions/intervenant/:id	controllers.Adhesions.intervenant(id: Long)
+POST	/adhesions/submit			controllers.Adhesions.submit()
+GET		/adhesions/intervenant/:id/add	controllers.Adhesions.add(id: Long)
+GET		/adhesions/delete/:id		controllers.Adhesions.delete(id: Long)
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

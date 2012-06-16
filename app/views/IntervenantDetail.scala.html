@@ -4,8 +4,9 @@
 <td>@intervenant.prenom @intervenant.nom</td>
 <td>@intervenant.email</td>
 <td>@for(adhesion <- intervenant.adhesions){
-@adhesion.mandat
-}</td>
+<a href="@routes.Adhesions.intervenant(intervenant.id)">@adhesion.mandat</a> 
+}    <a href="@routes.Adhesions.add(intervenant.id)">+</a>
+</td>
 <td><a href="@routes.Intervenants.edit(intervenant.id)">Modifier</a></td>
 <td><a href="@routes.Intervenants.delete(intervenant.id)">Supprimer</a></td>
 </tr>

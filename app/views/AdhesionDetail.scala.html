@@ -1,0 +1,31 @@
+@(adhesion: Form[Adhesion])
+
+@import helper._
+
+<tr>
+@form(action= routes.Adhesions.submit){
+	
+	<td>
+	<input type="hidden" name="id" value="@adhesion("id").value" />
+	@inputText(
+		adhesion("mandat"),
+		'_label-> "",
+		'_help -> "",
+		'class -> "input-small"
+	)
+	</td>
+	<td>
+	@inputText(
+		adhesion("dateEdition"),
+		'_label-> "",
+		'_help -> "",
+		'placeholder -> "jj/mm/aaaa",
+		'class -> "input-small"
+	)
+	</td>
+	<td>
+	<input type="submit" value="Modifier"/>
+	</td>
+	<td><a href="@routes.Adhesions.delete(Long.parseLong(adhesion("id").value))">Supprimer</a></td>
+}	
+</tr>

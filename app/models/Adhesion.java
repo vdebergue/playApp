@@ -25,9 +25,7 @@ public class Adhesion extends Model {
 	public Intervenant intervenant;
 
 	@Required
-	@MinLength(value=4)
-	@MaxLength(value=4)
-	public int mandat;
+	public Integer mandat;
 
 	@DateTime(pattern = "dd/MM/yyyy")
 	public Date dateEdition;

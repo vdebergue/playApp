@@ -1,0 +1,27 @@
+#intervenants :
+
+intervenants: 
+
+    - !!models.Intervenant
+        nom: Debergue
+        prenom: Vincent
+        email: vdeb@gmail.com
+    
+    - !!models.Intervenant
+        nom: Paul
+        prenom: Pierre
+        email: pp@mail.com
+    
+    - !!models.Intervenant
+        nom: René
+        prenom: Hervé
+        email: hr@mail.com
+
+#adhésions:
+
+adhesions:
+    - !!models.Adhesion
+        intervenant: !!models.Intervenant
+            id: 1
+        mandat: 2013
+        dateEdition: 2012-10-19
