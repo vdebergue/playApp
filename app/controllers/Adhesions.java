@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,8 +62,9 @@ public class Adhesions extends Controller {
 	
 	public static Result genererDoc(Long id){
 		try{
-			DocAdhesion.generer(Adhesion.find.byId(id));
-			return ok("Document bien généré");
+			String outputFilePath = DocAdhesion.generer(Adhesion.find.byId(id));
+			response().setHeader("Content-Disposition", "attachment; filename=\"file.docx\"");
+			return ok(new File(outputFilePath));
 		}catch (Exception e) {
 			return badRequest(views.html.defaultpages.badRequest.render(null, "Erreur: "+ e.getMessage()));
 		}

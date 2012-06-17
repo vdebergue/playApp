@@ -1,6 +1,7 @@
 @(formulaire: Form[Intervenant], edit: Boolean)
 
-@import helper._ 
+@import helper._
+@implicitFieldConstructor = @{ helper.FieldConstructor(twitterBootstrapInput.render) }
 
 
 @main( if(edit) "Modifier un Intervenant" else "Créer un intervenant"){

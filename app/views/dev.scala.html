@@ -1,3 +1,10 @@
+<div class="row-fluid">
+<div class="span2">
+@sideBar.render
+</div>
+
+<div class="span10">
+
 <h1>Développement d'une application avec le framework Play 2</h1>
 
 <h2>Introduction</h2>
@@ -768,5 +775,64 @@ Lorsque l'on rencontre une variable comme <code>${intervenant}</code> dans le te
 et enfin <code>}</code> <br />
 Pour éviter cela, il faut désactiver le vérificateur d'orthographe. 
 </p>
-<p>Ensuite nous créons une route pour générer les documents, 
+<p>Ensuite nous créons une route pour générer les documents. Dans <code>conf/routes : </code> </p>
+<pre><code>GET		/adhesions/generer/:id		controllers.Adhesions.genererDoc(id: Long)
+</code></pre>
+<p>Puis dans le controleur <code>Adhesions</code> nous ajoutons la méthode : </p>
+<pre class="prettyprint"><code>
+public static Result genererDoc(Long id){
+		try{
+			String outputFilePath = DocAdhesion.generer(Adhesion.find.byId(id));
+			response().setHeader("Content-Disposition", "attachment; filename=\"file.docx\"");
+			return ok(new File(outputFilePath));
+		}catch (Exception e) {
+			return badRequest(views.html.defaultpages.badRequest.render(null, "Erreur: "+ e.getMessage()));
+		}
+}
+</code></pre>
+<p>Il suffit maintenant d'ajouter un petit lien pour télécharger le document: </p>
+<img src="@routes.Assets.at("/images/download.png")" />
+
+<p>Nous avons maintenant fini avec les fonctionnalités de notre application. <br/>
+Elle nous permet de gérer les intervenants, de leur ajouter des adhésions, ainsi que de générer un document automatiquement à partir d'un template.
+<br />
+Pour finir, nous allons maintenant la rendre plus jolie et lui ajouter des barres de navigation.
+</p>
+ 
 <h1>Un petit habillage</h1>
+
+<h2>Bootstrap</h2>
+<p>Pour rendre notre application plus jolie, nous allons utiliser l'interface OpenSource développée par Twitter: Bootstrap. 
+</p>
+<p>Pour l'installation, nous avons deux choix: télécharger le fichier zip à partir du <a href="http://twitter.github.com/bootstrap/index.html">site web</a>, ou utiliser un répertoire maven. <br />
+Ici nous allons utiliser la deuxième option. <br />
+Pour cela nous modifions <code>project/Build.scala</code> :
+</p>
+<pre class="prettyprint"><code>    val appDependencies = Seq(
+      // Add your project dependencies here,
+        "org.docx4j" % "docx4j" % "2.8.0",
+        "com.github.twitter" % "bootstrap" % "2.0.4"
+    )
+
+    val main = PlayProject(appName, appVersion, appDependencies, mainLang = JAVA).settings(
+      // Add your own project settings here
+        resolvers += "webjars" at "http://webjars.github.com/m2"
+    )
+</code></pre>
+<p>Maintenant, on redémarre le serveur play pour qu'il télécharge les dépendances. <br />
+Dans <code>app/views/main.scala.html</code>, on ajoute le lien vers la feuille de style : 
+</p>
+<pre class="prettyprint"><code>&lt;link rel="stylesheet" media="screen" href="@@routes.Assets.at("stylesheets/bootstrap.min.css")"&gt;
+</code></pre>
+<p>Puis dans <code>public/stylesheets/main.css</code> : </p>
+<pre class="prettyprint"><code>body {
+    margin-top: 50px;
+}
+</code></pre>
+<p>Pour que les différents champs <code>input</code> aient automatiquement un look bootstrap, nous devons faire quelques modifications à nos vues. Je vais passer cette partie car elle n'est pas très intéressante. 
+Pour plus de détails, <a href="https://github.com/jamesward/play2torial/blob/master/JAVA.md">cette page</a> détaille les étapes à effectuer.
+</p>
+
+
+</div>
+</div>

@@ -1,6 +1,8 @@
 @(adhesion: Form[Adhesion])
 
 @import helper._
+@implicitFieldConstructor = @{ helper.FieldConstructor(twitterBootstrapInput.render) }
+
 
 <tr>
 @form(action= routes.Adhesions.submit){
@@ -26,6 +28,7 @@
 	<td>
 	<input type="submit" value="Modifier"/>
 	</td>
+	<td><a href="@routes.Adhesions.genererDoc(Long.parseLong(adhesion("id").value))">Télécharger</a></td>
 	<td><a href="@routes.Adhesions.delete(Long.parseLong(adhesion("id").value))">Supprimer</a></td>
 }	
 </tr>

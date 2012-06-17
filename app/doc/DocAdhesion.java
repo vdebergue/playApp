@@ -17,7 +17,7 @@ public class DocAdhesion {
 
 	public static JAXBContext context = org.docx4j.jaxb.Context.jc; 
 	
-	public static void generer(Adhesion adhesion) throws Exception {
+	public static String generer(Adhesion adhesion) throws Exception {
 
 		String inputfilepath = System.getProperty("user.dir")+"/app/doc/adhesionTemplate.docx";
 
@@ -51,6 +51,8 @@ public class DocAdhesion {
 		SaveToZipFile saver = new SaveToZipFile(wordMLPackage);
 		saver.save(outputfilepath);
 		System.out.println("Saved output to:" + outputfilepath);
+		
+		return outputfilepath;
 
 	}
 	
