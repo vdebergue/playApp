@@ -683,14 +683,90 @@ object ApplicationBuild extends Build {
 
     val main = PlayProject(appName, appVersion, appDependencies, mainLang = JAVA).settings(
       // Add your own project settings here    
-    		resolvers += "webjars" at "http://webjars.github.com/m2"
     )
 
 }
 </code></pre>
-<p>Il faut ensuite recharger l'application (quitter la console play et la relancer), là normalement les dépendances sont téléchargées automatiquement.
+<p>Il faut ensuite recharger l'application (quitter la console play et la relancer), les dépendances sont téléchargées automatiquement.
 </p>
 <h2>Le code !</h2>
-<p></p>
+<p>On crée tout d'abord une classe qui va générer notre template à partir d'une adhésion :</p>
+<pre class="prettyprint"><code>
+package doc;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.xml.bind.JAXBContext;
+
+import models.Adhesion;
+
+import org.docx4j.XmlUtils;
+import org.docx4j.openpackaging.io.SaveToZipFile;
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
+import org.docx4j.wml.Document;
+
+public class DocAdhesion {
+
+	public static JAXBContext context = org.docx4j.jaxb.Context.jc; 
+	
+	public static void generer(Adhesion adhesion) throws Exception {
+
+		String inputfilepath = System.getProperty("user.dir")+"/app/doc/adhesionTemplate.docx";
+
+		String outputfilepath = System.getProperty("user.dir")
+				+ "/test-out.docx";
+
+		// Open a document from the file system
+		// 1. Load the Package
+		WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage
+				.load(new java.io.File(inputfilepath));
+
+		// 2. Fetch the document part
+		MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
+
+		org.docx4j.wml.Document wmlDocumentEl = (org.docx4j.wml.Document) documentPart
+				.getJaxbElement();
+
+		// xml --&gt; string
+		String xml = XmlUtils.marshaltoString(wmlDocumentEl, true);
+
+		//On récupère les mappings
+		HashMap&lt;String, String&gt; mappings = getMapping(adhesion);
+		
+		// valorize template
+		Object obj = XmlUtils.unmarshallFromTemplate(xml, mappings);
+
+		// change JaxbElement
+		documentPart.setJaxbElement((Document) obj);
+
+		// Save it
+		SaveToZipFile saver = new SaveToZipFile(wordMLPackage);
+		saver.save(outputfilepath);
+		System.out.println("Saved output to:" + outputfilepath);
+
+	}
+	
+	private static HashMap&lt;String,String&gt; getMapping(Adhesion adhesion){
+		HashMap&lt;String, String&gt; mappings = new HashMap&lt;String, String&gt;();
+		
+		mappings.put("dateEdition", adhesion.dateEdition.toLocaleString());
+		mappings.put("intervenant", adhesion.intervenant.nom +" "+ adhesion.intervenant.prenom);
+		mappings.put("mandat", adhesion.mandat +"");
+		
+		return mappings;
+	}
+
+}
+</code></pre>
+<p>Comment ça marche ? <br />
+Notre template en docx est en fait un document zippé qui contient des fichiers xml. Parmi ceux là, on va récupérer le corps du document et le parcourir.
+Lorsque l'on rencontre une variable comme <code>${intervenant}</code> dans le template, elle sera remplacée par la valeur de intervenant de la map. 
+</p>
+<p>Attention ! Word a tendance à séparer les variables, ainsi alors qu'on écrit <code>${key}</code>, il va écrire dans le fichier xml, <code>${</code> puis plus loin <code>key</code>
+et enfin <code>}</code> <br />
+Pour éviter cela, il faut désactiver le vérificateur d'orthographe. 
+</p>
+<p>Ensuite nous créons une route pour générer les documents, 
 <h1>Un petit habillage</h1>

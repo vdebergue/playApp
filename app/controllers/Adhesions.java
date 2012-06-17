@@ -3,6 +3,8 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import doc.DocAdhesion;
+
 import models.Adhesion;
 import models.Intervenant;
 import play.data.Form;
@@ -55,6 +57,15 @@ public class Adhesions extends Controller {
 		Long idIntervenant = Adhesion.find.byId(id).intervenant.id;
 		Adhesion.find.ref(id).delete();
 		return intervenant(idIntervenant);
+	}
+	
+	public static Result genererDoc(Long id){
+		try{
+			DocAdhesion.generer(Adhesion.find.byId(id));
+			return ok("Document bien généré");
+		}catch (Exception e) {
+			return badRequest(views.html.defaultpages.badRequest.render(null, "Erreur: "+ e.getMessage()));
+		}
 	}
 	
 }
