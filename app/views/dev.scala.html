@@ -586,10 +586,111 @@ public class Intervenants extends Controller {
 <p>Il faut maintenant faire la même chose pour les adhésions. 
 Comme cette partie ne présente pas vraiment d'intérêt, nous allons simplement mettre le résultat final: 
 </p>
-//TODO : les images
+<img src="@routes.Assets.at("/images/adhesionInter.png")" />
 
 <h1>Charger des données au démarrage</h1>
+<p>La base de données étant stockée en mémoire, à chaque fois que nous relançons l'application, nos données sont effacées. <br />
+Pour pouvoir tester notre application nous allons charger des données au démarrage. Pour cela, nous allons utiliser un fichier YAML pour représenter nos données.
+</p>
+<p>Ajoutons dans <code>/conf</code> le fichier  <code>initial-data.yml</code> :
+</p>
+<pre class="prettyprint"><code>
+#intervenants :
+
+intervenants: 
+
+    - !!models.Intervenant
+        nom: Debergue
+        prenom: Vincent
+        email: vdeb@@gmail.com
+    
+    - !!models.Intervenant
+        nom: Paul
+        prenom: Pierre
+        email: pp@@mail.com
+    
+    - !!models.Intervenant
+        nom: René
+        prenom: Hervé
+        email: hr@@mail.com
+
+#adhésions:
+
+adhesions:
+    - !!models.Adhesion
+        intervenant: !!models.Intervenant
+            id: 1
+        mandat: 2013
+        dateEdition: 2012-10-19
+</code></pre>
+<p>Nous devons également ajouter une classe qui va charger ce fichier au démarrage. <br />
+Ajoutons cette classe dans le répertoire <code>/app</code> de l'application :
+<pre class="prettyprint"><code>
+import play.*;
+import play.libs.*;
+import java.util.*;
+import com.avaje.ebean.*;
+import models.*;
+
+public class Global extends GlobalSettings {
+
+	public void onStart(Application app) {
+		InitialData.insert(app);
+	}
+
+	static class InitialData {
+
+		public static void insert(Application app) {
+			if (Ebean.find(Intervenant.class).findRowCount() == 0) {
+
+				Map&lt;String, List&lt;Object&gt;&gt; all = (Map&lt;String, List&lt;Object&gt;&gt;) Yaml.load("initial-data.yml");
+
+				Ebean.save(all.get("intervenants"));
+				Ebean.save(all.get("adhesions"));
+
+			}
+		}
+
+	}
+
+}
+</code></pre>
+<p>Enfin, dans <code>conf/application.conf</code>, il faut décommenter la ligne : <code>application.global=Global</code>
+</p>
 
 <h1>Générer des documents</h1>
+<p>Nous voulons maintenant générer des documents à partir des adhésions. Pour faciliter la génération de document, nous partirons d'un Template qui contiendra des variables.
+Le code Java devra remplacer ces variables par leur valeur.</p>
+<p>Les documents seront des documents word en .docx. Pour les manipuler, deux librairies sont ressorties de recherche sur Internet : Apache POI et docx4j. <br /> 
+Cependant la première apparait comme plus adaptée aux feuilles de calculs, alors que la deuxième permet de manipuler plus facilement les docx. C'est donc celle ci que j'ai choisi par la suite. </p>
+
+<h2>Installation de docx4j</h2> 
+<p>Plutôt que de télécharger les .jar à partir du site Internet, nous allons profiter du fait que docx4j est disponible sur les répertoires Maven. 
+En effet Play intègre Apache Ivy qui permet de gérer les dépendances et qui est compatible avec les répertoires Maven.
+</p>
+<p>Pour ajouter docx4j à notre projet, il suffit de modifier le fichier <code>project/Build.scala</code> :
+</p>
+<pre class="prettyprint"><code>
+object ApplicationBuild extends Build {
+
+    val appName         = "playApp"
+    val appVersion      = "1.0-SNAPSHOT"
+
+    val appDependencies = Seq(
+      // Add your project dependencies here,
+	"org.docx4j" % "docx4j" % "2.8.0"
+    )
+
+    val main = PlayProject(appName, appVersion, appDependencies, mainLang = JAVA).settings(
+      // Add your own project settings here    
+    		resolvers += "webjars" at "http://webjars.github.com/m2"
+    )
+
+}
+</code></pre>
+<p>Il faut ensuite recharger l'application (quitter la console play et la relancer), là normalement les dépendances sont téléchargées automatiquement.
+</p>
+<h2>Le code !</h2>
+<p></p>
 
 <h1>Un petit habillage</h1>
