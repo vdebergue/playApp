@@ -1,3 +1,7 @@
+<script type="text/javascript">
+window.addEventListener("hashchange", function() { scrollBy(0, -50) })
+</script>
+
 <div class="row-fluid">
 <div class="span2">
 @sideBar.render
@@ -7,7 +11,7 @@
 
 <h1>Développement d'une application avec le framework Play 2</h1>
 
-<h2>Introduction</h2>
+<h2 id="introduction">Introduction</h2>
 <p>
 Cette application est un exemple d'application qui peut être réalisée en utilisant le framework d'application Rest Play!
 Pour cette application, la version 2 du framework a été utilisée.
@@ -29,7 +33,7 @@ Ainsi nous créerons plusieurs vues pour cette gestion :
 </ul>
 
 
-<h2>Configuration de play</h2>
+<h2 id="configuration-play">Configuration de play</h2>
 <p>
 Pour installer le framework, je me suis reporté à cette <a href="http://www.playframework.org/documentation/2.0.1/Installing">page</a>
 </p>
@@ -54,7 +58,7 @@ Ainsi nous avons configuré Play! et créé notre première application. Nous al
 </p>
 
 
-<h2>Analyse d'une application Play!</h2>
+<h2 id="analyse-application">Analyse d'une application Play!</h2>
 
 <p>L'application par défault est composé des différents répertoires: (<a href="http://www.playframework.org/documentation/2.0.1/Anatomy">source</a>) <br /> 
 <pre><code>app                      → Application sources
@@ -102,8 +106,8 @@ On voit bien le découpement MVC de l'application. La configuration est égaleme
 
 <p>Dans la suite nous allons commencer à créer notre modèle.</p>
 
-<h2>Création des modèles</h2>
-<h3>Configuration</h3>
+<h2 id="modeles">Création des modèles</h2>
+<h3 id="configuration-modeles">Configuration</h3>
 <p>
 Nous allons stocker nos informations dans une base de données en mémoire. L'application embarque H2, il suffit de l'activer. 
 Pour cela, il suffit de décommenter dans le fichier conf/application.conf les lignes suivantes : <br />
@@ -116,7 +120,7 @@ Pour l'activer, on décommente la ligne:
 <pre><code>ebean.default="models.*"</code></pre>
 
 
-<h3>La classe Intervenant</h3>
+<h3 id="classe-intervenant">La classe Intervenant</h3>
 <p>On va créer un intervenant possédant un id, un nom, prénom et un email.
 <pre class="prettyprint"><code class="language-java">package models;
 
@@ -193,7 +197,7 @@ De son côté le framework génère automatiquement des accès à nos variables,
 Passons maintenant au deuxième modèle: les adhésions. 
 </p>
 
-<h3>La classe Adhesion</h3>
+<h3 id="classe-adhesion">La classe Adhesion</h3>
 
 <pre class="prettyprint"><code>
 package models;
@@ -234,7 +238,7 @@ Et tout cela sans que l'on n'ait à ajouter une ligne de code. <br />
 Lorsqu'on recharge la page <a href="http://localhost:9000">http://localhost:9000</a> une nouvelle évolution de la base de données nous est proposée.
 </p>
 
-<h3>Retour sur la classe Intervenant</h3>
+<h3 id="retour-classe-intervenant">Retour sur la classe Intervenant</h3>
 <p>Dans la classe adhésions nous avons défini une relation <code>@@ManyToOne</code> pour lier les adhésions à un intervenant. Maintenant nous allons lier les intervenants avec les adhésions. 
 </p>
 <p>Dans la classe intervenant, il suffit de rajouter la ligne: </p>
@@ -251,9 +255,9 @@ Le paramètre <code>cascade</code> permet de spécifier la relation entre les de
 Dans la suite, nous allons configurer les controleurs et les routes de l'applcation. 
 </p>
 
-<h2>Création des controleurs</h2>
+<h2 id="controleurs">Création des controleurs</h2>
 
-<h3>Le controleur Intervenants</h3>
+<h3 id="controleur-intervenants">Le controleur Intervenants</h3>
 <p>Nous allons créer un controleur pour gérer les actions sur les intervenants. Nous voulons :
 </p>
 <ul>
@@ -338,9 +342,9 @@ Le routage avec play! est très facile et puissant, on peut facilement passer pl
 
 <p>Maintenant que les routes sont prêtes, nous allons construire les vues pour afficher nos données. Ensuite nous reviendrons sur notre formulaire pour le compléter</p>
 
-<h2>Les vues</h2>
+<h2 id="vues">Les vues</h2>
 
-<h3>Un formulaire pour l'intervenant</h3>
+<h3 id="formulaire-intervenant">Un formulaire pour l'intervenant</h3>
 <p>Nous allons créer une vue qui contiendra un formulaire pour créer et modifier un intervenant.</p>
 <p>Le framework Play! utilise un modèle particulier pour les vues, les fichiers sont du type : <code>*.scala.html</code>. 
 Ces fichiers contiennent une description de la page avec des balises HTML mais on peut également rajouter du code Scala. Tout le code Scala devra être précédé de: <code>@@</code>.
@@ -436,7 +440,7 @@ Le contenu sera également passé à main et placé dans la balise <code>&lt;bod
 Maintenant que notre vue est prête, revenons au controleur Intervenants.
 </p> 
 
-<h3>Retour sur le controleur intervenant</h3>
+<h3 id="retour-controleur">Retour sur le controleur Intervenants</h3>
 <p>Nous avions laissé notre controleur avec des actions encore non-implémentées. Nous allons maintenant les compléter avec la vue que nous venons de créer.
 </p>
 <pre class="prettyprint"><code>
@@ -497,7 +501,7 @@ Remarquons que si l'on ajoute des valeurs à notre objet Intervenant, le code du
 Dans la suite nous allons rapidement implémenter les vues pour afficher la liste des intervenants.
 </p>
 
-<h3>La vue pour lister les intervenants</h3>
+<h3 id="vue-liste">La vue pour lister les intervenants</h3>
 
 <p>Pour afficher la liste des intervenants, nous allons créer deux vues : une qui recevra une liste d'intervenants, une autre qui recevra un intervenant et affichera les détails.
 La deuxième vue sera appelée au sein de la première en lui passant un intervenant de la liste.
@@ -589,13 +593,13 @@ public class Intervenants extends Controller {
 
 </code></pre>
 
-<h2>La partie adhésion</h2>
+<h2 id="adhesion">La partie adhésion</h2>
 <p>Il faut maintenant faire la même chose pour les adhésions. 
 Comme cette partie ne présente pas vraiment d'intérêt, nous allons simplement mettre le résultat final: 
 </p>
 <img src="@routes.Assets.at("/images/adhesionInter.png")" />
 
-<h1>Charger des données au démarrage</h1>
+<h2 id="donnees-demarrage">Charger des données au démarrage</h2>
 <p>La base de données étant stockée en mémoire, à chaque fois que nous relançons l'application, nos données sont effacées. <br />
 Pour pouvoir tester notre application nous allons charger des données au démarrage. Pour cela, nous allons utiliser un fichier YAML pour représenter nos données.
 </p>
@@ -665,13 +669,13 @@ public class Global extends GlobalSettings {
 <p>Enfin, dans <code>conf/application.conf</code>, il faut décommenter la ligne : <code>application.global=Global</code>
 </p>
 
-<h1>Générer des documents</h1>
+<h2 id="documents">Générer des documents</h2>
 <p>Nous voulons maintenant générer des documents à partir des adhésions. Pour faciliter la génération de document, nous partirons d'un Template qui contiendra des variables.
 Le code Java devra remplacer ces variables par leur valeur.</p>
 <p>Les documents seront des documents word en .docx. Pour les manipuler, deux librairies sont ressorties de recherche sur Internet : Apache POI et docx4j. <br /> 
 Cependant la première apparait comme plus adaptée aux feuilles de calculs, alors que la deuxième permet de manipuler plus facilement les docx. C'est donc celle ci que j'ai choisi par la suite. </p>
 
-<h2>Installation de docx4j</h2> 
+<h3 id="installation-docx4j">Installation de docx4j</h3> 
 <p>Plutôt que de télécharger les .jar à partir du site Internet, nous allons profiter du fait que docx4j est disponible sur les répertoires Maven. 
 En effet Play intègre Apache Ivy qui permet de gérer les dépendances et qui est compatible avec les répertoires Maven.
 </p>
@@ -696,7 +700,7 @@ object ApplicationBuild extends Build {
 </code></pre>
 <p>Il faut ensuite recharger l'application (quitter la console play et la relancer), les dépendances sont téléchargées automatiquement.
 </p>
-<h2>Le code !</h2>
+<h3 id="code">Le code !</h3>
 <p>On crée tout d'abord une classe qui va générer notre template à partir d'une adhésion :</p>
 <pre class="prettyprint"><code>
 package doc;
@@ -799,9 +803,9 @@ Elle nous permet de gérer les intervenants, de leur ajouter des adhésions, ain
 Pour finir, nous allons maintenant la rendre plus jolie et lui ajouter des barres de navigation.
 </p>
  
-<h1>Un petit habillage</h1>
+<h2 id="habillage">Un petit habillage</h2>
 
-<h2>Bootstrap</h2>
+<h3 id="bootstrap">Bootstrap</h3>
 <p>Pour rendre notre application plus jolie, nous allons utiliser l'interface OpenSource développée par Twitter: Bootstrap. 
 </p>
 <p>Pour l'installation, nous avons deux choix: télécharger le fichier zip à partir du <a href="http://twitter.github.com/bootstrap/index.html">site web</a>, ou utiliser un répertoire maven. <br />
@@ -811,7 +815,7 @@ Pour cela nous modifions <code>project/Build.scala</code> :
 <pre class="prettyprint"><code>    val appDependencies = Seq(
       // Add your project dependencies here,
         "org.docx4j" % "docx4j" % "2.8.0",
-        "com.github.twitter" % "bootstrap" % "2.0.4"
+        "com.github.twitter" % "bootstrap" % "2.0.3"
     )
 
     val main = PlayProject(appName, appVersion, appDependencies, mainLang = JAVA).settings(
@@ -822,7 +826,7 @@ Pour cela nous modifions <code>project/Build.scala</code> :
 <p>Maintenant, on redémarre le serveur play pour qu'il télécharge les dépendances. <br />
 Dans <code>app/views/main.scala.html</code>, on ajoute le lien vers la feuille de style : 
 </p>
-<pre class="prettyprint"><code>&lt;link rel="stylesheet" media="screen" href="@@routes.Assets.at("stylesheets/bootstrap.min.css")"&gt;
+<pre class="prettyprint"><code>&lt;link rel="stylesheet" media="screen" href="@@routes.Assets.at("css/bootstrap.min.css")"&gt;
 </code></pre>
 <p>Puis dans <code>public/stylesheets/main.css</code> : </p>
 <pre class="prettyprint"><code>body {
