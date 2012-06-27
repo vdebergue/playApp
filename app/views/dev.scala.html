@@ -188,7 +188,7 @@ Bien sur, on peut implenter nous mêmes des setters et getters. Dans la suite du
 
 <p>
 Lorsque l'on relance notre page, le framework a detecté un nouveau modèle à stocker dans notre base de données et nous propose automatiquement de faire une évolution de notre base :
-</p><img src="@routes.Assets.at("images/evolution.png")"/>
+</p><img src='@routes.Assets.at("images/evolution.png")'/>
 <p>On applique l'évolution à notre base de données 
 </p>
 
@@ -336,9 +336,9 @@ Ensuite pour chaque méthode, nous définissons une URI avec possiblement des pa
 Le routage avec play! est très facile et puissant, on peut facilement passer plusieurs paramètres, utiliser des expressions régulières ... 
 </p>
 <p>Nous pouvons essayer les routes dès maintenant : <a href="http://localhost:9000/intervenants/edit/5">http://localhost:9000/intervenants/edit/5</a> renvoie une page TODO : </p>
-<img src="@routes.Assets.at("images/todo.png")"/>
+<img src='@routes.Assets.at("images/todo.png")'/>
 <p>Si l'on met une mauvaise URL, on obtient une erreur. (ici l'erreur est détaillée car le serveur est lancé en mode développement)</p>
-<img src="@routes.Assets.at("images/badresult.png")"/>
+<img src='@routes.Assets.at("images/badresult.png")'/>
 
 <p>Maintenant que les routes sont prêtes, nous allons construire les vues pour afficher nos données. Ensuite nous reviendrons sur notre formulaire pour le compléter</p>
 
@@ -486,13 +486,13 @@ public class Intervenants extends Controller {
 </code></pre>
 <p>On peut maintenant lancer le navigateur sur la page <a href="http://localhost:9000/intervenants/create">http://localhost:9000/intervenants/create</a>
 </p>
-<img src="@routes.Assets.at("/images/create.png")" />
+<img src='@routes.Assets.at("images/create.png")' />
 <p>Si l'on remplit le formulaire avec des erreurs : </p>
-<img src="@routes.Assets.at("/images/erreurs.png")" />
+<img src='@routes.Assets.at("images/erreurs.png")' />
 <p>Remarquons que l'adresse mail a été notée comme étant fausse, cela est dû à l'annotation <code>@@Email</code> dans le classe <code>Intervenant</code>
 </p>
 <p>En ayant déjà ajouté un intervenant : </p>
-<img src="@routes.Assets.at("/images/edit.png")" />
+<img src='@routes.Assets.at("images/edit.png")' />
 <p>Ici le titre de la page a été modifié ainsi que le texte du bouton car nous passons le paramètre <code>edit = true</code> 
 </p>
 <p>Nous venons de créer un formulaire pour notre objet intervenant et le controlleur pour gérer sa validation. 
@@ -597,7 +597,7 @@ public class Intervenants extends Controller {
 <p>Il faut maintenant faire la même chose pour les adhésions. 
 Comme cette partie ne présente pas vraiment d'intérêt, nous allons simplement mettre le résultat final: 
 </p>
-<img src="@routes.Assets.at("/images/adhesionInter.png")" />
+<img src='@routes.Assets.at("images/adhesionInter.png")'/>
 
 <h2 id="donnees-demarrage">Charger des données au démarrage</h2>
 <p>La base de données étant stockée en mémoire, à chaque fois que nous relançons l'application, nos données sont effacées. <br />
@@ -795,7 +795,7 @@ public static Result genererDoc(Long id){
 }
 </code></pre>
 <p>Il suffit maintenant d'ajouter un petit lien pour télécharger le document: </p>
-<img src="@routes.Assets.at("/images/download.png")" />
+<img src='@routes.Assets.at("images/download.png")' />
 
 <p>Nous avons maintenant fini avec les fonctionnalités de notre application. <br/>
 Elle nous permet de gérer les intervenants, de leur ajouter des adhésions, ainsi que de générer un document automatiquement à partir d'un template.
@@ -838,9 +838,9 @@ Pour plus de détails, <a href="https://github.com/jamesward/play2torial/blob/ma
 </p>
 <h3 id="resultat">Résultat :</h3>
 <p>Avec peu de modifications de notre code, on obtient un assez joli résultat : </p>
-<p><img src="@routes.Assets.at("/images/bootListe.png")" /></p>
-<p><img src="@routes.Assets.at("/images/bootErreur.png")" /></p>
-<p><img src="@routes.Assets.at("/images/bootAdh.png")" /></p>
+<p><img src='@routes.Assets.at("images/bootListe.png")' /></p>
+<p><img src='@routes.Assets.at("images/bootErreur.png")' /></p>
+<p><img src='@routes.Assets.at("images/bootAdh.png")' /></p>
 
 <h2 id="conclusion">Conclusion</h2>
 <p>Finalement nous sommes arrivés à notre objectif: mettre en place une application pour gérer les intervenants et les adhésions.

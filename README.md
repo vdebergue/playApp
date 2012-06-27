@@ -15,6 +15,6 @@ Lancez play :
 
 * Installez le framework ... 
 
-* Sinon téléchargez playApp.zip
+* Sinon téléchargez playapp-1.0.zip 
 
-Dé-zippez le contenu, et lancez le fichier start
+Dé-zippez le contenu, et lancez le fichier start (ou sous Windows start.bat)
