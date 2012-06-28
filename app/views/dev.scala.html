@@ -21,10 +21,10 @@ Cette application est un Intranet pour la gestion des études de Telecom Etude. 
 Il faut ainsi gérer différents utilisateurs, des opérations sur la base de données, de la génération de document.
 </p>
 <p>
-Dans cet exemple, nous nous concentrerons sur la gestion des intervenants. Ce sont les personnes qui réalisent les études et ui doivent adhérer à l'association.
+Dans cet exemple, nous nous concentrerons sur la gestion des intervenants. Ce sont les personnes qui réalisent les études et qui doivent adhérer à l'association.
 Cette adhésion doit être renouvellée chaque année et à chaque fois, il faut générer un document pour valider l'adhésion. Ainsi un intervenant peut avoir plusieurs adhésions.
 <br />
-Ainsi nous créerons plusieurs vues pour cette gestion :
+Nous créerons plusieurs vues pour cette gestion:
 </p>
 <ul>
   <li> Une liste de tous les intervenants </li>
@@ -45,22 +45,22 @@ On sélectionne ensuite une application de type java.
 <p>
 Pour lancer l'application on utilise la commande : <br/> 
 <code>play ~run</code><br />
-Cela permet d'avoir la compilation des sources dès qu'un des fichiers est modifié.
+L'utilisation du <code>~</code> permet d'avoir la compilation des sources dès qu'un des fichiers est modifié.
 </p>
 <p>
-Un IDE tel qu'Eclipse peut être utilisé pour modifier les fichiers. Pour cela, le framework permet de générer automatiquement des fichiers de configuration pour Eclipse grâce à la commande : 
+Un IDE tel qu'Eclipse peut être utilisé pour le développement. Pour cela, le framework permet de générer automatiquement des fichiers de configuration pour Eclipse grâce à la commande : 
 <br />
 <code>play eclipsify</code><br />
 Il suffit ensuite d'importer le projet dans Eclipse.
 </p>
 <p>Pour voir l'application il suffit de lancer dans un navigateur l'url : <a href="http://localhost:9000">http://localhost:9000</a> <br />
-Ainsi nous avons configuré Play! et créé notre première application. Nous allons dans la partie suivante analysé ce qui constitue une application play!. 
+Ainsi nous avons configuré Play! et créé notre première application. Nous allons dans la partie suivante analyser ce qui constitue une application play!. 
 </p>
 
 
 <h2 id="analyse-application">Analyse d'une application Play!</h2>
 
-<p>L'application par défault est composé des différents répertoires: (<a href="http://www.playframework.org/documentation/2.0.1/Anatomy">source</a>) <br /> 
+<p>L'application par défault est composée des différents répertoires: (<a href="http://www.playframework.org/documentation/2.0.1/Anatomy">source</a>) <br /> 
 <pre><code>app                      → Application sources
  └ assets                → Compiled asset sources
     └ stylesheets        → Typically LESS CSS sources
@@ -102,7 +102,7 @@ Les principaux fichiers et répertoires sont :
   <li> app/models : les modèles pour l'application </li>
   <li> app/views : les différentes vues
 </ul>
-On voit bien le découpement MVC de l'application. La configuration est également aisée notamment ma connexion à une base de données. 
+On voit bien le découpement MVC de l'application. La configuration est également aisée notamment la connexion à une base de données. 
 
 <p>Dans la suite nous allons commencer à créer notre modèle.</p>
 
@@ -115,7 +115,7 @@ Pour cela, il suffit de décommenter dans le fichier conf/application.conf les l
 <pre><code>db.default.driver=org.h2.Driver
 db.default.url="jdbc:h2:mem:play"</code></pre>
 Pour la connection avec la base de données nous allons utiliser l'ORM fourni avec le framework (avec la version 2): Ebean. 
-Ebean utilise les annotations JPA: <code>@@entity</code>, <code>@@OneToMany</code> ... <br />
+Ebean utilise les annotations JPA comme <code>@@entity</code>, <code>@@OneToMany</code> ... <br />
 Pour l'activer, on décommente la ligne: 
 <pre><code>ebean.default="models.*"</code></pre>
 
@@ -176,9 +176,9 @@ public class Intervenant extends Model {
 </code></pre>
 <p>Nous pouvons déjà commenter plusieurs choses :</p>  
 <ul>
-<li> Notre classe étend Model ce qui lui nous donne accès à des fonctions <code>save()</code>, <code>update()</code> ... pour gérer facilement notre modèle. </li>
+<li> Notre classe étend Model ce qui lui nous donne accès à des fonctions comme <code>save()</code>, <code>update()</code> ... pour gérer facilement notre modèle. </li>
 <li> Tous les paramètres sont <code>public</code>. 
-Cela vient de scala, tous les paramètres sont déclarés comme public et le pré-compilateur va les convertir en champ statiques et générer les setters/getters de façon automatique.
+Cela vient de scala, tous les paramètres sont déclarés comme public et le pré-compilateur va les convertir en champs statiques et générer les setters/getters de façon automatique.
 Bien sur, on peut implenter nous mêmes des setters et getters. Dans la suite du code, on utilisera <code class="prettyprint">intervenant.nom</code> qui sera automatiquement par <code class="prettyprint">intervenant.getNom()</code> </li>
 <li>On utilise les annotations JPA <code>@@Entity, @@Id ...</code> pour définir notre objet.
 <li>Des annotations de play, nous permettent de définir des contraintes sur nos paramètres. Cela sera très utile pour nos formulaires. </li>
@@ -189,7 +189,7 @@ Bien sur, on peut implenter nous mêmes des setters et getters. Dans la suite du
 <p>
 Lorsque l'on relance notre page, le framework a detecté un nouveau modèle à stocker dans notre base de données et nous propose automatiquement de faire une évolution de notre base :
 </p><img src='@routes.Assets.at("images/evolution.png")'/>
-<p>On applique l'évolution à notre base de données 
+<p>On applique l'évolution à notre base de données.  
 </p>
 
 <p>Nous venons de réaliser très simplement un modèle. Grâce aux annotations, nous avons même commencé à réfléchir au type de données et aux différentes contraintes. 
@@ -837,7 +837,7 @@ Dans <code>app/views/main.scala.html</code>, on ajoute le lien vers la feuille d
 Pour plus de détails, <a href="https://github.com/jamesward/play2torial/blob/master/JAVA.md">cette page</a> détaille les étapes à effectuer.
 </p>
 <h3 id="resultat">Résultat :</h3>
-<p>Avec peu de modifications de notre code, on obtient un assez joli résultat : </p>
+<p>Avec peu de modifications de notre code, on obtient un résultat assez joli: </p>
 <p><img src='@routes.Assets.at("images/bootListe.png")' /></p>
 <p><img src='@routes.Assets.at("images/bootErreur.png")' /></p>
 <p><img src='@routes.Assets.at("images/bootAdh.png")' /></p>
@@ -845,7 +845,7 @@ Pour plus de détails, <a href="https://github.com/jamesward/play2torial/blob/ma
 <h2 id="conclusion">Conclusion</h2>
 <p>Finalement nous sommes arrivés à notre objectif: mettre en place une application pour gérer les intervenants et les adhésions.
 Avec le framework Play en version 2, nous avons vu comment créer une simple application, créer des formulaires, se connecter à une base de données ... <br />
-Nous avons également utilisé des outils intégrés au Framework, notamment la gestion de dépendances pour ajouter des librairies facilement à notre projet.
+Nous avons utilisé des outils intégrés au Framework, notamment la gestion de dépendances pour ajouter des librairies facilement à notre projet.
 </p>
 
 <p>Pour moi, cette expérience a été très positive. J'ai beaucoup apprécié la facilité à démarrer une première application et les différentes aides apportées par le framework.
@@ -855,7 +855,7 @@ Il est très facile également de créer des WebServices avec le framework, il i
 Au final, grâce à l'ensemble des outils qu'apporte le framework, on ne se concentre plus vraiment sur les petits détails de l'application comme la gestion des données mais plus sur les parties essentielles de l'application, c'est à dire la logique et l'ergomie des pages.
 De plus, la communauté autour de ce framework est vraiment très active et on trouve très facilement de l'aide, des tutoriels ou des modules.   
 </p>
-<p>Dans ce projet, nous n'avons pas abordé certains points de play comme la gestion des tests, les acteurs Akka pour gérer la concurence et la plannification de tâche, les événements asynchrones ou encore l'internationalisation</p>
+<p>Dans ce projet, nous n'avons pas abordé certains points de play comme la gestion des tests, les acteurs Akka pour gérer la concurence et la plannification de tâche,	 les événements asynchrones ou encore l'internationalisation</p>
 
 <h2 id="references">Références</h2>
 <p>Pour cette application, je me suis basé sur les sites suivants : </p>
