@@ -1,4 +1,4 @@
-# Exemple d'une application utilisant le framework play 2
+# Exemple d'une application java utilisant le framework play 2
 
 ## Si vous avez installé play 2.0
 Clonez le répertoire :
